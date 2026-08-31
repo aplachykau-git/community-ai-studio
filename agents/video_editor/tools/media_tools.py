@@ -6,8 +6,6 @@ import shutil
 import time
 from typing import Any, Optional
 
-import google.auth
-import google.auth.transport.requests
 import requests
 from google import genai
 from google.adk.tools import ToolContext
@@ -375,30 +373,11 @@ def _generate_with_omni(photo_path: str, creative_prompt: str) -> str:
     print(f'   └─ Final Omni Prompt: "{i2v_prompt}"')
     print("🚀 Submitting request to Google AI Gemini Omni Flash (Interactions API)...")
 
-    headers = {"Content-Type": "application/json"}
-    if api_key.startswith("AIza"):
-        url = f"https://generativelanguage.googleapis.com/v1beta/interactions?key={api_key}"
-    else:
-        # Obtain OAuth2 token from Google Cloud ADC / Service Account
-        token = None
-        try:
-            creds, _ = google.auth.default(
-                scopes=[
-                    "https://www.googleapis.com/auth/generative-language",
-                    "https://www.googleapis.com/auth/cloud-platform",
-                ]
-            )
-            auth_req = google.auth.transport.requests.Request()
-            creds.refresh(auth_req)
-            token = creds.token
-        except Exception as e:
-            print(f"⚠️ [Omni Auth] Could not obtain OAuth2 token from ADC: {e}")
-
-        if token:
-            headers["Authorization"] = f"Bearer {token}"
-            url = "https://generativelanguage.googleapis.com/v1beta/interactions"
-        else:
-            url = f"https://generativelanguage.googleapis.com/v1beta/interactions?key={api_key}"
+    headers = {
+        "Content-Type": "application/json",
+        "x-goog-api-key": api_key,
+    }
+    url = f"https://generativelanguage.googleapis.com/v1beta/interactions?key={api_key}"
 
     payload = {
         "model": "gemini-omni-1.1-flash",
