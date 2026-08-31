@@ -1,0 +1,56 @@
+[project]
+name = "community-studio-workspace"
+version = "0.1.0"
+description = "Community AI Studio multi-agent orchestration workspace"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "a2a-sdk==1.1.2",
+    "fastapi==0.141.1",
+    "google-adk[eval]==2.8.0",
+    "google-api-python-client==2.199.0",
+    "google-auth==2.57.0",
+    "google-auth-oauthlib==1.4.1",
+    "google-cloud-aiplatform==1.165.1",
+    "google-cloud-storage==3.13.1",
+    "google-genai==2.20.0",
+    "openpyxl==3.1.5",
+    "pillow==12.3.0",
+    "pypdfium2==5.13.0",
+    "python-docx==1.2.0",
+    "python-dotenv==1.2.3",
+    "requests==2.34.2",
+    "sse-starlette==3.4.8",
+    "uvicorn[standard]==0.52.4",
+]
+
+[dependency-groups]
+dev = [
+    "ruff==0.16.5",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["agents*"]
+
+[tool.ruff]
+# Set the maximum line length to 120.
+line-length = 120
+
+[tool.ruff.lint]
+# Enable pycodestyle (E, W), Pyflakes (F), and isort (I) rules.
+select = ["E", "F", "I", "W"]
+ignore = ["E501", "E402", "F401", "F841", "W291"]
+
+[tool.ruff.format]
+# Use double quotes for strings, standard for python.
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.pyright]
+extraPaths = ["agents"]
