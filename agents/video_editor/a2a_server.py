@@ -16,6 +16,11 @@ load_dotenv(override=True)
 from google.adk.a2a.utils.agent_to_a2a import to_a2a
 
 try:
+    from common.demo_logger import COLOR_VIDEO, TerminalA2ALoggingMiddleware
+except (ImportError, ValueError):
+    from agents.common.demo_logger import COLOR_VIDEO, TerminalA2ALoggingMiddleware
+
+try:
     from .agent import video_editor_agent
 except (ImportError, ValueError):
     from agents.video_editor.agent import video_editor_agent
@@ -68,6 +73,7 @@ class DynamicAgentCardOriginMiddleware(BaseHTTPMiddleware):
 
 
 a2a_app.add_middleware(DynamicAgentCardOriginMiddleware)
+a2a_app.add_middleware(TerminalA2ALoggingMiddleware, service_name="Video Editor :8081", color=COLOR_VIDEO)
 
 if __name__ == "__main__":
     print(f"🚀 Starting Video Editor A2A Server on {PROTOCOL}://{HOST}:{PORT}")
